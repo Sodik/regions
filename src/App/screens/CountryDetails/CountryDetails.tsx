@@ -8,6 +8,7 @@ import { makeStyles, Theme, Typography } from '@material-ui/core';
 import { Spinner } from '../../components/Spinner';
 import { GET_COUNTRY, getCountry } from '../../../store/countries/countries.actions';
 import { ErrorMessage } from 'App/components/ErrorMessage';
+import { Breadcrumbs } from 'App/components/Breadcrumbs';
 
 const loadingSelector = createLoadingSelector([GET_COUNTRY]);
 const errorSelector = createErrorSelector([GET_COUNTRY]);
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-type TRouteParams = RouteComponentProps<{ countryName: string }>;
+type TRouteParams = RouteComponentProps<{ countryName: string; regionName: string }>;
 type TProps = TRouteParams & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
 const CountryDetails: FC<TProps> = props => {
@@ -42,7 +43,7 @@ const CountryDetails: FC<TProps> = props => {
     error,
     loading,
     match: {
-      params: { countryName }
+      params: { countryName, regionName }
     }
   } = props;
 
@@ -91,6 +92,13 @@ const CountryDetails: FC<TProps> = props => {
 
     return (
       <div>
+        <Breadcrumbs
+          items={[
+            { label: 'regions', path: '/' },
+            { label: regionName, path: `/region/${regionName}` },
+            { label: countryName }
+          ]}
+        />
         <Typography variant="h2">{name}</Typography>
         <img className={styles.flag} src={flag} alt={`${name} flag`} />
         {renderDetails(details)}

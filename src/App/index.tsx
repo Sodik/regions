@@ -1,9 +1,9 @@
 import React from 'react';
-import { NavLink, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import Routes from './routes';
-import { makeStyles, Container, AppBar, Toolbar } from '@material-ui/core';
+import { makeStyles, Container, Theme } from '@material-ui/core';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
   '@global': {
     body: {
       margin: 0
@@ -15,22 +15,15 @@ const useStyles = makeStyles({
     textTransform: 'uppercase'
   },
   content: {
-    paddingTop: 100
+    paddingTop: theme.spacing(2)
   }
-});
+}));
 
 const App = () => {
   const styles = useStyles();
 
   return (
     <>
-      <AppBar>
-        <Toolbar>
-          <NavLink className={styles.homeLink} to="/">
-            Home
-          </NavLink>
-        </Toolbar>
-      </AppBar>
       <Container className={styles.content}>
         <Routes />
       </Container>

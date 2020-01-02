@@ -18,6 +18,7 @@ import { createErrorSelector } from '../../../store/errors/errors.selectors';
 import { Spinner } from '../../components/Spinner';
 import { EOrder, EOrderBy } from 'store/countries/countries.reducer';
 import { ErrorMessage } from '../../components/ErrorMessage';
+import { Breadcrumbs } from '../../components/Breadcrumbs';
 
 const loadingSelector = createLoadingSelector([GET_COUNTRIES]);
 const errorSelector = createErrorSelector([GET_COUNTRIES]);
@@ -45,7 +46,7 @@ function desc<T>(a: T, b: T, orderBy: keyof T) {
   return 0;
 }
 
-type TProps = RouteComponentProps<{ name: string }> &
+type TProps = RouteComponentProps<{ regionName: string }> &
   typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
@@ -61,15 +62,15 @@ const Region: FC<TProps> = props => {
     order,
     setDataOrder,
     match: {
-      params: { name }
+      params: { regionName }
     }
   } = props;
 
   useEffect(() => {
-    if (name) {
-      getData(name);
+    if (regionName) {
+      getData(regionName);
     }
-  }, [name, getData]);
+  }, [regionName, getData]);
   const sortedItems = useMemo(() => {
     return items.sort((a, b) =>
       order === EOrder.DESC ? desc(a, b, orderBy) : -desc(a, b, orderBy)
@@ -91,6 +92,7 @@ const Region: FC<TProps> = props => {
 
   return (
     <div>
+      <Breadcrumbs items={[{ label: 'regions', path: '/' }, { label: regionName }]} />
       {loading ? (
         <Spinner />
       ) : (
@@ -128,7 +130,7 @@ const Region: FC<TProps> = props => {
                   hover
                   key={item.name}
                   onClick={() => {
-                    history.push(`/region/${name}/${item.name}`);
+                    history.push(`/region/${regionName}/${item.name}`);
                   }}
                 >
                   <TableCell>
